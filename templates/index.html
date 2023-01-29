@@ -1,0 +1,70 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{% block title %}Top 100 Movies{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="heading">Top 100 Movies</h1>
+  <p class="description">These are the all-time best movies.</p>
+
+<!--    <a href="{{ url_for('delete_all') }}" class="button delete-button">Delete all movies</a>-->
+    <div>
+        {{ wtf.quick_form(movie_search_form, novalidate=True) }}
+    </div>
+
+    {% if movie_search_form.errors %}
+    <ul class="errors">
+    {% for error in form.name.errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+    <div class="container text-center add">
+<a href="{{ url_for('add') }}" class="button">Add Movie</a>
+</div>
+
+<!--    Movie cards   -->
+    <div class="row">
+    {% for movie in movies %}
+        <div class="col-md-3">
+  <div class="card" style="width:100%;">
+    <div class="front" style="background-image: url({{ movie.img_url}});">
+        <p class="small" style="text-shadow: 1px 1px #000000;">Rank: </p>
+        <br>
+        <p class="medium" style="color:red;text-shadow: 1px 1px #000000;">{{ movie.ranking }}/100</p></div>
+    <div class="back"><div>
+    <div class="title">{{ movie.title }} <span class="release_date">({{ movie.year }})</span></div>
+        <div class="rating">
+            <label>{{ movie.rating }}</label>
+          <i class="fas fa-star star"></i></div>
+
+
+        {% if movie.director %}
+        <p class="review">"Directed by {{ movie.director }}"</p>
+        {% endif %}
+
+
+          <p class="review">"{{ movie.review }}"</p>
+        <p class="overview">{{ movie.description }}</p>
+        <a href="{{ url_for('edit', id=movie.id) }}" class="button">Update</a>
+        <a href="{{ url_for('delete', id=movie.id) }}" class="button delete-button">Delete</a>
+      </div>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+        </div>
+</div>
+
+
+
+{% endblock %}

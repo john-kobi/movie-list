@@ -1,0 +1,61 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{% block title %}Top 100 Movies{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="heading">Top 100 Movies</h1>
+  <p class="description">These are the all-time best movies.</p>
+<div><a href="{{ url_for('home') }}" class="button">Back to all movies</a></div>
+    <br><br>
+<!--    <a href="{{ url_for('delete_all') }}" class="button delete-button">Delete all movies</a>-->
+    <div>
+        {{ wtf.quick_form(movie_search_form, novalidate=True) }}
+    </div>
+    <div class="container text-center add">
+<a href="{{ url_for('add') }}" class="button">Add Movie</a>
+</div>
+    <div class="row">
+        {% if search_result %}
+
+
+        <div class="col-md-3">
+  <div class="card" style="width:100%;">
+    <div class="front" style="background-image: url({{ search_result.img_url}});">
+        <p class="small" style="text-shadow: 1px 1px #000000;">Rank: </p>
+        <br>
+        <p class="medium" style="color:red;text-shadow: 1px 1px #000000;">{{ search_result.ranking }}/100</p></div>
+    <div class="back"><div>
+    <div class="title">{{ search_result.title }} <span class="release_date">({{ search_result.year }})</span></div>
+        <div class="rating">
+            <label>{{ search_result.rating }}</label>
+          <i class="fas fa-star star"></i></div>
+          <p class="review">"{{ search_result.review }}"</p>
+        <p class="overview">{{ search_result.description }}</p>
+        <a href="{{ url_for('edit', id=search_result.id) }}" class="button">Update</a>
+        <a href="{{ url_for('delete', id=search_result.id) }}" class="button delete-button">Delete</a>
+      </div>
+      </div>
+    </div>
+  </div>
+        {% endif %}
+
+
+
+
+
+        </div>
+</div>
+
+
+
+{% endblock %}
